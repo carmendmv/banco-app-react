@@ -4,7 +4,6 @@ import Login from "./Login/Login";
 import Balance from "./Balance/Balance";
 import Movements from "./Movements/Movements";
 import Summary from "./Summary/Summary";
-import Transfers from "./Transfers/Transfers";
 
 function App() {
   return (
@@ -14,13 +13,18 @@ function App() {
         <img src="logo.png" alt="Logo" className="logo" />
         <Login />
       </nav>
-      <main className="app">
-        <Balance />
-        <Movements />
-        <Summary />
-        <Transfers />
 
-        {/*  OPERATION: TRANSFERS  */}
+      <main className="app">
+        {/* BALANCE */}
+        <Balance />
+
+        {/* MOVEMENTS */}
+        <Movements />
+
+        {/* SUMMARY */}
+        <Summary />
+
+        {/* OPERATION: TRANSFERS */}
         <div className="operation operation--transfer">
           <h2>Transfer money</h2>
           <form className="form form--transfer">
@@ -32,7 +36,7 @@ function App() {
           </form>
         </div>
 
-        {/*  OPERATION: LOAN  */}
+        {/* OPERATION: LOAN */}
         <div className="operation operation--loan">
           <h2>Request loan</h2>
           <form className="form form--loan">
@@ -45,7 +49,7 @@ function App() {
           </form>
         </div>
 
-        {/*  OPERATION: CLOSE  */}
+        {/* OPERATION: CLOSE */}
         <div className="operation operation--close">
           <h2>Close account</h2>
           <form className="form form--close">
@@ -61,7 +65,7 @@ function App() {
           </form>
         </div>
 
-        {/*  LOGOUT TIMER  */}
+        {/* LOGOUT TIMER */}
         <p className="logout-timer">
           You will be logged out in <span className="timer">05:00</span>
         </p>
