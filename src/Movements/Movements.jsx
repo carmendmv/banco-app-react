@@ -1,26 +1,31 @@
+import PropTypes from "prop-types";
 import "./Movements.css";
 
-function Movements() {
-  const movements = [
-    { type: "deposit", amount: "4 000", date: "3 days ago" },
-    { type: "withdrawal", amount: "-378", date: "24/01/2037" },
-    { type: "deposit", amount: "1 500", date: "12/01/2037" },
-    { type: "withdrawal", amount: "-200", date: "01/01/2037" },
-  ];
+function Movements({ account }) {
+  if (!account) return null;
 
   return (
     <div className="movements">
-      {movements.map((movement, index) => (
-        <div key={index} className="movements__row">
-          <div className={`movements__type movements__type--${movement.type}`}>
-            {movement.type === "deposit" ? "Deposit" : "Withdrawal"}
+      {account.movements.map((mov, i) => {
+        const type = mov > 0 ? "deposit" : "withdrawal";
+        return (
+          <div className="movements__row" key={i}>
+            <div className={`movements__type movements__type--${type}`}>
+              {i + 1} {type}
+            </div>
+            <div className="movements__date">3 days ago</div>
+            <div className="movements__value">{mov.toFixed(2)}€</div>
           </div>
-          <div className="movements__date">{movement.date}</div>
-          <div className="movements__value">{movement.amount}€</div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
+
+Movements.propTypes = {
+  account: PropTypes.shape({
+    movements: PropTypes.arrayOf(PropTypes.number).isRequired,
+  }),
+};
 
 export default Movements;

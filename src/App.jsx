@@ -1,74 +1,92 @@
-import "./App.css";
+import { useState, useEffect } from "react";
 import Welcome from "./Welcome/Welcome";
 import Login from "./Login/Login";
 import Balance from "./Balance/Balance";
 import Movements from "./Movements/Movements";
 import Summary from "./Summary/Summary";
+import Operations from "./Operations/Operations";
+import "./App.css";
 
 function App() {
+  const [currentAccount, setCurrentAccount] = useState(null);
+  const [accounts, setAccounts] = useState([
+    {
+      owner: "Juan Sánchez",
+      movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
+      interestRate: 1.2,
+      pin: "1111",
+    },
+    {
+      owner: "María Portazgo",
+      movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
+      interestRate: 1.5,
+      pin: "2222",
+    },
+    {
+      owner: "Estefanía Pueyo",
+      movements: [200, -200, 340, -300, -20, 50, 400, -460],
+      interestRate: 0.7,
+      pin: "3333",
+    },
+    {
+      owner: "Javier Rodríguez",
+      movements: [430, 1000, 700, 50, 90],
+      interestRate: 1,
+      pin: "4444",
+    },
+  ]);
+
+  // Crear usernames al cargar el componente
+  useEffect(() => {
+    const accountsWithUsernames = accounts.map((account) => ({
+      ...account,
+      username: account.owner
+        .toLowerCase()
+        .split(" ")
+        .map((name) => name[0])
+        .join(""),
+    }));
+    setAccounts(accountsWithUsernames);
+  }, []);
+
+  const handleLogin = (username, pin) => {
+    const account = accounts.find(
+      (acc) => acc.username === username && acc.pin === pin,
+    );
+
+    if (account) {
+      setCurrentAccount(account);
+      console.log("Login successful!");
+    } else {
+      console.log("Invalid credentials!");
+    }
+  };
+
   return (
     <>
       <nav>
-        <Welcome />
+        <Welcome account={currentAccount} />
         <img src="logo.png" alt="Logo" className="logo" />
-        <Login />
+        <Login onLogin={handleLogin} />
       </nav>
 
-      <main className="app">
+      <main className="app" style={{ opacity: currentAccount ? 1 : 0 }}>
         {/* BALANCE */}
-        <Balance />
+        <Balance account={currentAccount} />
 
         {/* MOVEMENTS */}
-        <Movements />
+        <Movements account={currentAccount} />
 
         {/* SUMMARY */}
-        <Summary />
+        <Summary account={currentAccount} />
 
-        {/* OPERATION: TRANSFERS */}
-        <div className="operation operation--transfer">
-          <h2>Transfer money</h2>
-          <form className="form form--transfer">
-            <input type="text" className="form__input form__input--to" />
-            <input type="number" className="form__input form__input--amount" />
-            <button className="form__btn form__btn--transfer">&rarr;</button>
-            <label className="form__label">Transfer to</label>
-            <label className="form__label">Amount</label>
-          </form>
-        </div>
-
-        {/* OPERATION: LOAN */}
-        <div className="operation operation--loan">
-          <h2>Request loan</h2>
-          <form className="form form--loan">
-            <input
-              type="number"
-              className="form__input form__input--loan-amount"
-            />
-            <button className="form__btn form__btn--loan">&rarr;</button>
-            <label className="form__label form__label--loan">Amount</label>
-          </form>
-        </div>
-
-        {/* OPERATION: CLOSE */}
-        <div className="operation operation--close">
-          <h2>Close account</h2>
-          <form className="form form--close">
-            <input type="text" className="form__input form__input--user" />
-            <input
-              type="password"
-              maxLength="6"
-              className="form__input form__input--pin"
-            />
-            <button className="form__btn form__btn--close">&rarr;</button>
-            <label className="form__label">Confirm user</label>
-            <label className="form__label">Confirm PIN</label>
-          </form>
-        </div>
-
-        {/* LOGOUT TIMER */}
-        <p className="logout-timer">
-          You will be logged out in <span className="timer">05:00</span>
-        </p>
+        {/* OPERATIONS */}
+        <Operations
+          account={currentAccount}
+          onTransfer={() => {}}
+          onLoan={() => {}}
+          onClose={() => {}}
+        />
       </main>
     </>
   );
